@@ -83,6 +83,6 @@ PlacesObjects
 ## Appendix
 
 | Error Code | Erklärung |
-| ------------- |:-------------:|
+| ------------- |-------------|
 | *404* | Ort existiert nicht |
 | *601* | Duplikat in Daten gefunden |

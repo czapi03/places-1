@@ -1,6 +1,7 @@
 {
   "places":[
     {
+      "id": 1,
       "title": "Testort",
       "lat": 0,
       "lng": 0
@@ -8,5 +9,6 @@
   ],
   "config": {
     "zoom": 12
-  }
+  },
+  "maxid": 1
 }

@@ -13,3 +13,12 @@ fs.watchFile( serverFile, function() {
   server = cp.fork( serverFile );
   console.log( 'Server gestartet.' );
 });
+
+// Modules places
+fs.watchFile( 'my_modules/places.js', function() {
+  server.kill();
+  console.log( 'Server beendet.' );
+
+  server = cp.fork( serverFile );
+  console.log( 'Server gestartet.' );
+});

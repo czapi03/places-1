@@ -29,25 +29,29 @@ app.get('/', function( request, response ) {
 
 app.get('/places/', function( request, response ) {
   console.log( '-\nLade alle Orte' );
-  places.ladeOrte( function( orte ){ // orte -> ARRAY
+  places.ladeJSON().then( places.ladeOrte ).then( function( orte ){ // orte -> ARRAY
     var responseObjekt = {
       'places':orte
     }
     response.end( JSON.stringify(responseObjekt) );
-  } );
+  });
 });
 
 app.delete('/places/:id', function( request, response ) {
   console.log( '-\nStart entferne ID: ' +  request.params.id );
-  places.entferneOrt(  request.params.id, function( deleted ) {
-      var responseObjekt = {};
-      if ( deleted ) {
-        responseObjekt.status = 'success';
-      } else {
-        responseObjekt.status = 'error';
-        responseObjekt.code = 404;
-        responseObjekt.message = 'Ort existiert nicht.';
-      }
+
+  places.id = request.params.id;
+
+  places.ladeJSON()
+    .then( places.entferneOrt.bind(places) )
+    .then( places.speichereJSON )
+    .then( function() {
+        var responseObjekt = {status:'success'};
+        response.end( JSON.stringify(responseObjekt) );
+    })
+    .catch( function() {
+      var responseObjekt = {status:'error',code:404,message:'...'};
       response.end( JSON.stringify(responseObjekt) );
-  });
+    });
+
 });

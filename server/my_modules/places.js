@@ -2,26 +2,33 @@ var fs = require( 'fs' );
 const jsonFile = 'places.json';
 
 module.exports = {
-  ladeJSON:function( callback ) {
-    fs.readFile( jsonFile, function( error, data) {
-      var alleDaten = JSON.parse(data);
-      callback( alleDaten );
+  ladeJSON:function() {
+    return new Promise( function(resolve,reject) {
+      fs.readFile( jsonFile, function( error, data) {
+        var alleDaten = JSON.parse(data);
+        resolve(alleDaten);
+      });
+    })
+  },
+  speichereJSON:function(alleDaten) {
+    return new Promise( function(resolve,reject) {
+      console.log( 'Speichere JSON' );
+      fs.writeFile( jsonFile, JSON.stringify(alleDaten), function( error, data) {
+        resolve();
+      });
     });
   },
-  speichereJSON:function(data,callback) {
-    console.log( 'Speichere JSON' );
-    fs.writeFile( jsonFile, JSON.stringify(data), function( error, data) {
-      callback();
+  ladeOrte:function( alleDaten ) {
+    return new Promise( function( resolve, reject ) {
+      resolve( alleDaten.places );
     });
-  },
-  ladeOrte:function( callback ) {
-    this.ladeJSON( function( alleDaten ) {
+    /*this.ladeJSON().then( function( alleDaten ) {
       callback( alleDaten.places );
-    });
+    });*/
   },
-  entferneOrt:function( id, callback ) {
-    /* entfernt Ort im JSON */
-    this.ladeJSON( function( alleDaten ) {
+  entferneOrt:function( alleDaten ) {
+    var id = this.id;
+    return new Promise( function(resolve,reject) {
       var orte = alleDaten.places;
       var foundId = false;
       for ( let i in orte ) {
@@ -31,16 +38,12 @@ module.exports = {
         }
       }
       console.log( 'Eintrag gefunden: ' + (foundId?'Ja':'Nein') );
-
       if ( !foundId ) {
-        callback( false );
+        reject();
       } else {
-        this.speichereJSON( alleDaten, function() {
-            console.log( 'ID '+id+' wurde entfernt.' );
-            callback( true );
-        });
+        console.log( 'ID '+id+' wurde entfernt.' );
+        resolve( alleDaten );
       }
-
-    }.bind(this) );
+    });
   }
 }

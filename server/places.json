@@ -1,1 +1,1 @@
-{"places":[{"id":3,"title":"Test","lat":3,"lng":2}],"config":{"zoom":12},"maxid":3}
+{"places":[{"id":3,"title":"Test","lat":3,"lng":2},{"title":"Wien","lat":"48.2021001258926","lng":"16.384277287870646"}],"config":{"zoom":12},"maxid":3}

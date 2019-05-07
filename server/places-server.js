@@ -28,7 +28,7 @@ app.get('/', function( request, response ) {
   response.end( 'Ich bins, dein Server!' );
 });
 */
-
+var idcounter = 0;
 app.get('/places/', function(request, response) {
   console.log('-\nLade alle Orte');
   places.ladeJSON().then(places.ladeOrte).then(function(orte) { // orte -> ARRAY
@@ -46,21 +46,28 @@ app.post('/places/', function(request, response) {
     var rlng = request.body.lng;
     var rlat = request.body.lat;
     var rtitle = request.body.title;
+ idcounter++;
 
     for (let i in alleorte) {
 
       if ( (alleorte[i].title == rtitle) || (alleorte[i].lat == rlat && alleorte[i].lng == rlng)) {
-          return response.end(JSON.stringify({
+           return response.end(JSON.stringify({
           "status": "error",
           "code": 601,
           "message": "Ort existiert bereits."
         }));
       }
-      alleorte.push(request.body);
-
-      places.speichereJSON(alleDaten);
 
     }
+    request.body.id = idcounter;
+    alleorte.push(request.body);
+
+    places.speichereJSON(alleDaten);
+
+    response.end(JSON.stringify({
+      "status": "success",
+      "id": "test"
+    }));
   });
 
 

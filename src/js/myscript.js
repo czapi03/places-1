@@ -154,27 +154,35 @@ $(document).ready(function() {
     $("#inputlngcoord").val(e.latlng.lng);
   })
 
- $('#btnnewLocation').on('click',function(){
+  $('#btnnewLocation').on('click', function() {
 
-   $.ajax({
-     url: "http://localhost:26893/places/",
-     method: "POST",
-     dataFormat: "json",
-     data:{
-         "title": $('#inputnamemarker').val(),
-         "lat": $('#inputlatcoord').val(),
-         "lng": $('#inputlngcoord').val()
-     },
-     success: function(response){
+    $.ajax({
+      url: "http://localhost:26893/places/",
+      method: "POST",
+      dataFormat: "json",
+      data: {
+        "title": $('#inputnamemarker').val(),
+        "lat": $('#inputlatcoord').val(),
+        "lng": $('#inputlngcoord').val()
+      },
+      success: function(response) {
+        if (response.status == "error") {
+          toastr["error"]($('#inputnamemarker').val() + " exisiert schon", "Fehler");
+        } else {
+          toastr["success"]("Ort wurde angelegt.", "Erfolg");
+          window.location.reload(); //User merkts nicht
+        }
+      },
+      error: function() {
+        toastr["error"]("falsch.", "Fehler");
+      }
 
-     }
 
 
 
+    })
 
-   })
-
- })
+  })
 
 
 
